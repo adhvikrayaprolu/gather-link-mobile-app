@@ -98,10 +98,3 @@ This directory includes all the backend logic that communicates with Firebase:
 - Firestore listeners for real-time updates
 
 Every interaction is designed to be asynchronous and uses `.addOnSuccessListener()` / `.addOnFailureListener()` blocks.
-
----
-
-## Linked READMEs
-
-- [⬅ Back to Main Folder README](README.md)
-- [⬅ Root Project Overview](app/src/main/README.md)
