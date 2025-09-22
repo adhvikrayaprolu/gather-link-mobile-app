@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">GatherLink</string>
+    <string name="post_topic">Talk to other users!</string>
+    <string name="select_group">Select Group:</string>
+    <string name="post_label">Post:</string>
+    <string name="message_hint">Write your post here...</string>
+    <string name="post_button">Post</string>
+</resources>

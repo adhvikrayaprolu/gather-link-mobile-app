@@ -1,0 +1,39 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/welcomeHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Your Joined Groups"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="#234567"
+        android:gravity="center"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/noGroupsText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="You haven't joined any groups yet."
+        android:textSize="16sp"
+        android:visibility="gone"
+        android:textAlignment="center" />
+
+    <ProgressBar
+        android:id="@+id/myGroupsProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/myGroupsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="16dp" />
+</LinearLayout>

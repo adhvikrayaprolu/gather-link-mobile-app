@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "820719472687",
+    "project_id": "gatherlink-9b50d",
+    "storage_bucket": "gatherlink-9b50d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:820719472687:android:dc4c5ae5eeeaec740976da",
+        "android_client_info": {
+          "package_name": "com.example.gatherlink"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3kW2mpYTAh4Aqh0JFh6xbpJ2D4y1gqws"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
