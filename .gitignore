@@ -1,6 +1,7 @@
 # Android Studio specific
 *.iml
 .idea/
+app/.idea/
 .DS_Store
 
 # Gradle specific
