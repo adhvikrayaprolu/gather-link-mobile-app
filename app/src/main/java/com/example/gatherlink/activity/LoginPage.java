@@ -35,9 +35,11 @@ public class LoginPage extends AppCompatActivity {
         firebaseAuth =  FirebaseAuth.getInstance();
 
         loginButton.setOnClickListener(v -> {
-            if (!emailInput.getText().toString().isEmpty()
-                    && !passwordInput.getText().toString().isEmpty()) {
-                firebaseAuth.signInWithEmailAndPassword(emailInput, passwordInput);
+            String email = emailInput.getText().toString();
+            String password = passwordInput.getText().toString();
+
+            if (!email.isEmpty() && !password.isEmpty()) {
+                firebaseAuth.signInWithEmailAndPassword(email, password);
             }
 
         });
