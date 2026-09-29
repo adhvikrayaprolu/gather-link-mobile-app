@@ -16,7 +16,7 @@ jobs:
           java-version: '17'
       - uses: android-actions/setup-android@v3
       - uses: gradle/actions/setup-gradle@v4
-      - run: chmod +x gradlew && ./gradlew check assembleDebug
+      - run: chmod +x gradlew && ./gradlew check assembleDebug assembleDebugAndroidTest
   rules:
     runs-on: ubuntu-latest
     steps:

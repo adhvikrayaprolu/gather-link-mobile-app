@@ -50,7 +50,7 @@ service cloud.firestore {
       allow read: if signedIn() && resource.data.userId == request.auth.uid;
       allow create: if signedIn() && request.resource.data.userId == request.auth.uid
         && mid == request.auth.uid + '_' + request.resource.data.groupId
-        && exists(/databases/$(database)/documents/Groups/$(request.resource.data.groupId))
+        && getAfter(/databases/$(database)/documents/Groups/$(request.resource.data.groupId)).data.groupId == request.resource.data.groupId
         && request.resource.data.keys().hasOnly(['userId', 'groupId', 'joinedAt']);
       allow update: if signedIn() && resource.data.userId == request.auth.uid
         && request.resource.data.userId == resource.data.userId

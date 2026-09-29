@@ -26,7 +26,7 @@ public class MyGroupsActivity extends AppCompatActivity {
     private TextView noGroupsText;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private String currentUserId;
 
     private final ArrayList<GroupModel> myGroups = new ArrayList<>();
     private GroupAdapter groupAdapter;
@@ -34,6 +34,7 @@ public class MyGroupsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(!com.example.gatherlink.utils.SessionGuard.require(this))return;
         setContentView(R.layout.activity_my_groups);
 
         recyclerView = findViewById(R.id.myGroupsRecyclerView);
@@ -44,6 +45,7 @@ public class MyGroupsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(groupAdapter);
 
+        currentUserId=FirebaseAuth.getInstance().getCurrentUser().getUid();
         fetchUserGroups();
     }
 

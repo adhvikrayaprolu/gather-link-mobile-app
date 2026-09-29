@@ -24,6 +24,7 @@ public class CreateGroupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(!com.example.gatherlink.utils.SessionGuard.require(this))return;
         setContentView(R.layout.activity_create_group);
 
         store = FirebaseFirestore.getInstance();
@@ -65,7 +66,10 @@ public class CreateGroupActivity extends AppCompatActivity {
         com.google.firebase.firestore.DocumentReference ref = store.collection("Groups").document();
         newGroup.setGroupId(ref.getId());
         createGroupButton.setEnabled(false);
-        ref.set(newGroup)
+        var membershipRef=store.collection("GroupMemberships").document(auth.getCurrentUser().getUid()+"_"+ref.getId());
+        java.util.Map<String,Object> membership=new java.util.HashMap<>();membership.put("userId",auth.getCurrentUser().getUid());membership.put("groupId",ref.getId());membership.put("joinedAt",com.google.firebase.Timestamp.now());
+        var batch=store.batch();batch.set(ref,newGroup);batch.set(membershipRef,membership);
+        batch.commit()
                 .addOnSuccessListener(unused -> {
                     Toast.makeText(this, "Group created successfully!", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(this, ExploreGroupsActivity.class));

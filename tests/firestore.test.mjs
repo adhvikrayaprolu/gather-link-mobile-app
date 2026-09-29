@@ -1,7 +1,7 @@
 import {before, after, beforeEach, test} from 'node:test';
 import {readFileSync} from 'node:fs';
 import {initializeTestEnvironment, assertFails, assertSucceeds} from '@firebase/rules-unit-testing';
-import {doc, setDoc, getDoc, updateDoc, deleteDoc} from 'firebase/firestore';
+import {doc, setDoc, getDoc, updateDoc, deleteDoc, writeBatch} from 'firebase/firestore';
 let env;
 before(async () => { env = await initializeTestEnvironment({projectId:'demo-gatherlink',firestore:{host:'127.0.0.1',port:8089,rules:readFileSync('firestore.rules','utf8')}}); });
 after(async () => { await env.cleanup(); });
@@ -37,4 +37,11 @@ test('group owner cannot be replaced and membership cannot target someone else',
   await assertFails(updateDoc(doc(db('b'),'Groups/g'),{groupName:'Hijack'}));
   await assertFails(updateDoc(doc(db('a'),'Groups/g'),{ownerUid:'b'}));
   await assertFails(setDoc(doc(db('b'),'GroupMemberships/a_g'),{userId:'a',groupId:'g'}));
+});
+
+test('group and owner membership can be created atomically', async () => {
+  const a=db('a');const batch=writeBatch(a);
+  batch.set(doc(a,'Groups/new'),{ownerUid:'a',groupId:'new',groupName:'Group'});
+  batch.set(doc(a,'GroupMemberships/a_new'),{userId:'a',groupId:'new'});
+  await assertSucceeds(batch.commit());
 });

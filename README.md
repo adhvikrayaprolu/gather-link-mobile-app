@@ -53,3 +53,16 @@ Firebase rules are the authorization boundary; client checks are only feedback. 
 ## Future work
 
 Finish the audited navigation/empty/error-state tests and capture real emulator screenshots. Add measured query improvements only if network counts justify them.
+
+## Isolated Android emulator workflow
+No live Firebase writes are needed for a local demo. With an Android emulator running:
+
+```sh
+npm ci
+npm run emulators
+# In a second terminal:
+./gradlew -PfirebaseEmulators=true installDebug
+./gradlew -PfirebaseEmulators=true connectedDebugAndroidTest
+```
+
+The opt-in debug build switches Auth and Firestore to `demo-gatherlink` on localhost (Android host bridge `10.0.2.2`, ports 9099/8089). Release always disables this flag. Debug permits cleartext only for emulator development; release retains platform network protections. Emulator data is disposable and is never exported to the live project. Native SDK tests cover registration, credential-free profiles, group creation, membership, post editing, cross-user denial and sign-in. The standard build does not run emulator-dependent instrumentation tests.
