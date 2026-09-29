@@ -102,7 +102,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
                         membership.put("joinedAt", new Timestamp(new Date()));
 
                         db.collection("GroupMemberships")
-                                .add(membership)
+                                .document(currentUserId + "_" + group.getGroupId()).set(membership)
                                 .addOnSuccessListener(documentReference -> {
                                     Toast.makeText(holder.itemView.getContext(), "Successfully joined group!", Toast.LENGTH_SHORT).show();
                                     holder.joinGroupButton.setText("Joined");

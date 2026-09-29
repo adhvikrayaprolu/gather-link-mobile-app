@@ -42,6 +42,11 @@ public class CreateGroupActivity extends AppCompatActivity {
     private void createGroup() {
         String name = groupNameInput.getText().toString().trim();
         String desc = groupDescriptionInput.getText().toString().trim();
+        if (auth.getCurrentUser() == null) {
+            Toast.makeText(this, "Please sign in again.", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
         String email = auth.getCurrentUser().getEmail();
 
         if (name.isEmpty() || desc.isEmpty()) {
@@ -54,24 +59,21 @@ public class CreateGroupActivity extends AppCompatActivity {
         newGroup.setGroupName(name);
         newGroup.setDescription(desc);
         newGroup.setOwnerEmail(email);
+        newGroup.setOwnerUid(auth.getCurrentUser().getUid());
         newGroup.setCreatedAt(new Date());
 
-        store.collection("Groups").add(newGroup)
-                .addOnSuccessListener(documentReference -> {
-                    String groupId = documentReference.getId();
-                    documentReference.update("groupId", groupId)
-                            .addOnSuccessListener(unused -> {
-                                Toast.makeText(this, "Group created successfully!", Toast.LENGTH_SHORT).show();
-                                Intent createGroupIntent = new Intent(CreateGroupActivity.this, ExploreGroupsActivity.class);
-                                startActivity(createGroupIntent);
-                                finish();
-                            })
-                            .addOnFailureListener(e -> {
-                                Toast.makeText(this, "Group created, but could not set Group ID!", Toast.LENGTH_SHORT).show();
-                            });
+        com.google.firebase.firestore.DocumentReference ref = store.collection("Groups").document();
+        newGroup.setGroupId(ref.getId());
+        createGroupButton.setEnabled(false);
+        ref.set(newGroup)
+                .addOnSuccessListener(unused -> {
+                    Toast.makeText(this, "Group created successfully!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(this, ExploreGroupsActivity.class));
+                    finish();
                 })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Failed to create group!", Toast.LENGTH_SHORT).show();
+                .addOnFailureListener(error -> {
+                    createGroupButton.setEnabled(true);
+                    Toast.makeText(this, "Could not create group. Please retry.", Toast.LENGTH_SHORT).show();
                 });
     }
 }

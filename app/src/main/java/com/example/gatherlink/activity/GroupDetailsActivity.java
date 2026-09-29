@@ -22,6 +22,11 @@ public class GroupDetailsActivity extends AppCompatActivity {
 
         GroupModel group = (GroupModel) getIntent().getSerializableExtra("groupData");
 
+        if (group == null) {
+            android.widget.Toast.makeText(this, "Group information is missing.", android.widget.Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
         initializeFrontEndElements();
 
         nameText.setText(group.getGroupName());

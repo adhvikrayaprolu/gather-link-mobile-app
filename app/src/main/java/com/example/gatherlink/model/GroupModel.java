@@ -10,6 +10,7 @@ public class GroupModel implements Serializable {
     private String groupName;
     private String groupDescription;
     private String ownerEmail;
+    private String ownerUid;
 
     @ServerTimestamp
     private Date createdAt;
@@ -21,6 +22,9 @@ public class GroupModel implements Serializable {
     private Date lastPostAt;
 
     public GroupModel() {}
+
+    public String getOwnerUid() { return ownerUid; }
+    public void setOwnerUid(String ownerUid) { this.ownerUid = ownerUid; }
 
     // Getters and setters
     public String getGroupId() {

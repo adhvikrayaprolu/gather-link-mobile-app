@@ -79,13 +79,11 @@ public class ProfileFragment extends Fragment {
                         String firstName = doc.getString("firstName");
                         String lastName = doc.getString("lastName");
                         String email = doc.getString("email");
-                        String password = doc.getString("password");
 
                         welcomeText.setText("Welcome, " + firstName + "!");
                         editFirstName.setText(firstName);
                         editLastName.setText(lastName);
                         editEmail.setText(email);
-//                        editPassword.setText(password); // shows as ****
                     }
                 });
     }
@@ -98,12 +96,10 @@ public class ProfileFragment extends Fragment {
     private void updateUserDetails() {
         String newFirstName = editFirstName.getText().toString().trim();
         String newLastName = editLastName.getText().toString().trim();
-//        String newPassword = editPassword.getText().toString().trim();
 
         Map<String, Object> updates = new HashMap<>();
         updates.put("firstName", newFirstName);
         updates.put("lastName", newLastName);
-//        updates.put("password", newPassword);
         updates.put("updatedAt", FieldValue.serverTimestamp());
 
         firestore.collection("Users")

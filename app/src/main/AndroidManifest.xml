@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -14,19 +14,19 @@
         tools:targetApi="31">
 
         <activity android:name=".activity.LoginActivity"
-            android:exported="true">
+            android:exported="false">
         </activity>
 
         <activity android:name=".activity.ExploreGroupsActivity"
-            android:exported="true">
+            android:exported="false">
         </activity>
 
         <activity android:name=".activity.GroupDetailsActivity"
-            android:exported="true">
+            android:exported="false">
         </activity>
 
         <activity android:name=".activity.CreateGroupActivity"
-            android:exported="true">
+            android:exported="false">
         </activity>
 
         <activity android:name=".activity.MainActivity"
@@ -40,25 +40,25 @@
         </activity>
 
         <activity android:name=".activity.SignUpActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity android:name=".activity.MyGroupsActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity android:name=".activity.HomeActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity android:name=".activity.PostActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity android:name=".activity.MyPostsActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity android:name=".activity.PostDetailsActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity android:name=".activity.GroupPostsActivity"
-            android:exported="true" />
+            android:exported="false" />
 
     </application>
 

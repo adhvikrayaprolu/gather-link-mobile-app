@@ -1,73 +1,55 @@
-# GatherLink – Mobile App
+# GatherLink Android
 
-GatherLink is an Android app designed to connect users through interest-based groups. Users can create, join, and interact within groups by posting messages and engaging with others in real-time.
+Discover interest groups, join communities and publish group posts through a native Java/XML Android app backed by Firebase.
 
-Built using Android Studio with Firebase for authentication and real-time data storage, GatherLink offers a streamlined and responsive experience built entirely in Java.
+## What it does / key features
 
----
+Email/password Firebase Authentication, profile names, group discovery/creation/membership and group posts. This is a group-post product: the unused empty ChatActivity was removed; private chat and media attachments are not implemented.
 
-## Features
-- Create and manage groups
-- Post and interact with messages within groups
-- Register, log in, and maintain secure user sessions
-- Firebase Authentication and Firestore backend
-- Firebase integration for authentication and Firestore for real-time data
-- Clean, intuitive UI using Material Design
+## Screenshots / demo
 
----
+Use a disposable Firebase project or emulator: sign up → create a group → join as a second user → create/view/edit/delete that user's post → update profile → log out. Runtime navigation screenshots remain a verification task; no fabricated screenshots.
 
-## Tech Stack
+## Architecture / tech stack
 
-- **Java (Android SDK)** – Application logic and UI behavior
-- **XML** – Frontend UI layouts and styling
-- **Firebase Suite:**
-  - Firebase Authentication
-  - Firebase Firestore (NoSQL Database)
-  - Firebase Storage (for media or post attachments)
-- **Gradle** – Dependency and build management
-- **Android Studio** – IDE for development and testing
+Android API26+ / target35, Java11 language level, Gradle8.11.1 + Android plugin8.10.1, Firebase Auth and Firestore. Activities/fragments handle screen state, adapters bind lists, POJO models persist groups/posts; ProfileData constructs metadata without credentials. Firebase Auth is the sole credential store.
 
----
+## Quick start
 
-## Directory Structure (Simplified)
+Install JDK17, Android SDK35 and Android Studio (or command-line SDK). Set ANDROID_HOME or local.properties `sdk.dir` to your SDK. Replace `app/google-services.json` with your own Android Firebase client configuration for `com.example.gatherlink`, enable email/password Auth and Firestore.
 
-```text
-GatherLink/
-│
-├── app/
-│   ├── src/
-│   │   ├── main/                                → App logic and UI
-│   │   │   ├── java/com/example/gatherlink/     → Core Java classes: activities, fragments, adapters, models, utils
-│   │   │   ├── AndroidManifest.xml              → App component declarations, permissions, and intent filters
-│   │   │   └── res/                             → UI layout XMLs, drawables, values, themes
-│   ├── build.gradle                             → App-level Gradle configuration
-│   └── proguard-rules.pro                       → Proguard settings
-├── .gitignore
-├── build.gradle                   → Project-level Gradle config
-└── README.md                      → Main project documentation
+```sh
+./gradlew check assembleDebug
 ```
 
-## Navigation Notes
+This is the canonical validation/build command. Install `app/build/outputs/apk/debug/app-debug.apk` on an emulator/device for the demo. CI validates unit tests, lint and debug assembly.
 
-### To dive into core app functionality, navigate to:
-```text
-app/src/main/java/com/example/gatherlink/
+## Configuration / security
+
+`google-services.json` is public client configuration, not a service-account private key. It does not establish Firestore access control. Review API key restrictions, enable Auth and review rules in your own Firebase project. Never commit Admin SDK credentials.
+
+`firestore.rules` is staged for review; no rules are automatically deployed. Rules bind profiles to UID, allow only profile metadata, protect group ownership, require membership for creating posts and preserve author/group on mutations. Internal activities are nonexported; launcher is the only exported activity.
+
+**Existing data needs human review:** earlier signup copied plaintext passwords to `Users`. Stop using any deployed old app, remove those fields with an authorized admin migration and consider resetting affected credentials after review. This PR does not delete live data or rotate credentials. Existing Groups need verified `ownerUid`; existing random membership IDs must migrate to `<uid>_<groupId>` before these rules are deployed. Test on a disposable project first. Updates to legacy profiles still containing password are denied until cleaned.
+
+## Testing
+
+```sh
+./gradlew check assembleDebug
+npm ci
+npm run test:rules
 ```
 
-### To explore UI and resources, go to:
-```text
-app/src/main/res/
-```
+Rules tests run only `demo-gatherlink` locally using the Firestore emulator at 127.0.0.1:8089, require JDK17, and exercise owner/member denial and password rejection. No production credential is required. Local unit tests verify the persisted profile schema.
 
-## Manifest file:
-Declares:
-- Application metadata (app name, icon, themes)
-- All app Activity and Fragment components
-- Firebase permissions and integrations
-- Launch activity and deep linking capabilities
+## Project structure / data model
 
-## Other Notes
+`app/src/main/java/com/example/gatherlink/{activity,fragment,adapters,model,utils}` and `res/` contain native application code/layouts. `Users/{uid}` stores names/email/timestamps only; `Groups/{id}` stores `ownerUid`, identity/description; `GroupMemberships/{uid}_{groupId}` stores membership; `Groups/{id}/Posts/{id}` stores author/text/likes.
 
-- google-services.json is required for Firebase to function properly.
-- If you're cloning this project, make sure to sync Gradle and enable Firebase with your own config.
-- Sensitive credentials (like Firebase keys) should be rotated if this repository becomes public.
+## Design decisions / known limitations
+
+Firebase rules are the authorization boundary; client checks are only feedback. No Docker is needed for Android. Likes remain simple counters without per-user deduplication. Some list/auth/payload failure paths need more instrumentation coverage. No live Firebase deployment or runtime authorization proof is claimed from a successful build. Android SDK/Gradle artifacts require downloads on first run.
+
+## Future work
+
+Finish the audited navigation/empty/error-state tests and capture real emulator screenshots. Add measured query improvements only if network counts justify them.
