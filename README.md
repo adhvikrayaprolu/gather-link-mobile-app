@@ -71,3 +71,7 @@ Declares:
 - google-services.json is required for Firebase to function properly.
 - If you're cloning this project, make sure to sync Gradle and enable Firebase with your own config.
 - Sensitive credentials (like Firebase keys) should be rotated if this repository becomes public.
+
+## Engineering workflow
+
+See [engineering setup, validation and known blockers](docs/engineering-control-plane.md) and [agent instructions](AGENTS.md). Canonical validation: `./gradlew check assembleDebug` after the documented dependency setup.
