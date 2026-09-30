@@ -5,10 +5,10 @@ Join interest groups and create/interact with posts on Android.
 app/src/main/java/com/example/gatherlink: Java activities/fragments/adapters; app/src/main/res: XML UI; Firebase Auth/Firestore; Gradle/Android SDK35.
 
 # Local Development
-Use JDK17, Android SDK35 and an ignored local.properties sdk.dir if needed. ./gradlew check assembleDebug builds/lints; published main contains no meaningful test sources. Firebase client config is not an admin secret; do not deploy rules or mutate cloud data automatically.
+Follow the verified root README workflow. Root Makefiles coordinate Python/React environments where present; Spring defaults to persistent local H2; Android needs JDK17 and an explicit SDK path. Do not use source-level credentials or mutate live Firebase.
 
 # Validation
-Canonical command: `./gradlew check assembleDebug`. See docs/engineering-control-plane.md for prerequisites and known gaps. A build with zero tests is not behavioral validation. Do not skip a failing check or claim hosted CI passed before a run exists.
+Canonical setup/run/check commands: `./gradlew check assembleDebug; npm ci; npm run test:rules` (run as separate commands). See README for prerequisites. Behavioral tests are mandatory and CI runs them; do not reduce checks to syntax or zero-test builds. Provider tests use fakes or demo-gatherlink emulators.
 
 # Frontend Rules
 Keep the native stack (JSP, vanilla HTML or Android Java/XML). Preserve keyboard/accessibility, loading/error/empty states; do not migrate to React.
@@ -23,7 +23,7 @@ Add meaningful regression tests for the selected workflow, including failure/aut
 Read open GitHub issues as the work source. Branch from current main as codex/<issue>-<scope>; link the real issue in a draft PR, record validation and verification limits. Use Closes #N only when all criteria are met; issue closes on human merge, not when the draft opens. Never merge or push directly to main.
 
 # Do Not
-Do not commit secrets, migrate frameworks, change unrelated features, deploy, rotate credentials or mutate live cloud data. Do not treat unmerged local sprint branches as main. Before implementing overlapping work inspect the existing local branch listed in docs/engineering-control-plane.md and avoid duplicate PRs.
+Do not commit secrets, migrate frameworks, change unrelated features, deploy, rotate credentials or mutate live cloud data. Inspect open PRs before selecting an issue; the quality integration PR publishes earlier product and control-plane work. Never redo work already present in an active PR.
 
 # Issue Selection Rules
 1. Read the Portfolio readiness tracking meta issue; stop if complete.
