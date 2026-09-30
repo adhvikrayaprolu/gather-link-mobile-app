@@ -32,6 +32,7 @@ public class GroupPostsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(!com.example.gatherlink.utils.SessionGuard.require(this))return;
         setContentView(R.layout.activity_group_posts);
 
         group = (GroupModel) getIntent().getSerializableExtra("groupData");

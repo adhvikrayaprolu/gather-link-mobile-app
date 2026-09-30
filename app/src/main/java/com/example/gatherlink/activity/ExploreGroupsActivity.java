@@ -30,6 +30,7 @@ public class ExploreGroupsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(!com.example.gatherlink.utils.SessionGuard.require(this))return;
         setContentView(R.layout.activity_explore_groups);
 
         store = FirebaseFirestore.getInstance();

@@ -13,7 +13,7 @@ This folder contains **all screen-based activities** in the app, representing ma
 **Key Files:**
 
 - `MainActivity.java` – Launcher screen for the app.
-- `LoginActivity.java`, `LoginPage.java`, `SignUpActivity.java` – User authentication and onboarding.
+- `LoginActivity.java`, `SignUpActivity.java` – User authentication and onboarding.
 - `HomeActivity.java` – Home screen post-login, manages navigation and fragments.
 - `ExploreGroupsActivity.java` – Displays a list of available groups using `GroupAdapter`.
 - `CreateGroupActivity.java` – UI and logic for creating a new group.

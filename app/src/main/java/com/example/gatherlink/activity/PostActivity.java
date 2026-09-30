@@ -44,6 +44,7 @@ public class PostActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(!com.example.gatherlink.utils.SessionGuard.require(this))return;
         setContentView(R.layout.activity_post);
 
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -75,47 +76,40 @@ public class PostActivity extends AppCompatActivity {
     }
 
     private void loadGroupsFromFirestore() {
-        store.collection("Groups")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-
-                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                        String groupName = doc.getString("groupName");
-                        String groupId = doc.getId();
-                        groupNames.add(groupName);
-                        groupIds.add(groupId);
-                    }
-
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                            android.R.layout.simple_spinner_dropdown_item, groupNames);
-                    groupSpinner.setAdapter(adapter);
-
-                    if (operationCode.equalsIgnoreCase("edit") && postDetails != null) {
-                        int index = groupIds.indexOf(postDetails.getGroupId());
-                        if (index >= 0) {
-                            groupSpinner.setSelection(index);
-                            groupSpinner.setEnabled(false);
-                        }
-                    }
-
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Failed to load groups!", Toast.LENGTH_SHORT).show();
-                });
+        postMessageButton.setEnabled(false);
+        com.google.android.gms.tasks.Tasks.<Object>whenAllSuccess(
+          store.collection("Groups").get(),
+          store.collection("GroupMemberships").whereEqualTo("userId",currentUser.getUid()).get())
+          .addOnSuccessListener(results->{
+            var groups=(com.google.firebase.firestore.QuerySnapshot)results.get(0);
+            var memberships=(com.google.firebase.firestore.QuerySnapshot)results.get(1);
+            java.util.Set<String> joined=new java.util.HashSet<>();
+            for(var doc:memberships)joined.add(doc.getString("groupId"));
+            groupIds.clear();groupNames.clear();
+            for(var doc:groups){
+              if(currentUser.getUid().equals(doc.getString("ownerUid")) || joined.contains(doc.getId())){
+                groupIds.add(doc.getId());groupNames.add(doc.getString("groupName"));
+              }
+            }
+            groupSpinner.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,groupNames));
+            postMessageButton.setEnabled(!groupIds.isEmpty());
+            if(groupIds.isEmpty())Toast.makeText(this,"Join or create a group before posting.",Toast.LENGTH_LONG).show();
+            if(operationCode.equalsIgnoreCase("edit") && postDetails!=null){int index=groupIds.indexOf(postDetails.getGroupId());if(index>=0)groupSpinner.setSelection(index);groupSpinner.setEnabled(false);}
+          }).addOnFailureListener(error->Toast.makeText(this,"Could not load your groups. Reopen this screen to retry.",Toast.LENGTH_LONG).show());
     }
 
     private void setupOnClickListeners() {
         postMessageButton.setOnClickListener(v -> {
             String message = messageInput.getText().toString().trim();
 
-            if (!message.isEmpty()) {
+            if (!message.isEmpty() && message.length()<=2000) {
                 if (operationCode.equalsIgnoreCase("edit")) {
                     updatePost(message);
                     return;
                 }
                 createPost(message);
             } else {
-                Toast.makeText(this, "Please enter a message.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Enter a message of 1–2000 characters.", Toast.LENGTH_SHORT).show();
             }
         });
     }

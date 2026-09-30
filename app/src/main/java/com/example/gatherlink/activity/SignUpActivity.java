@@ -13,7 +13,8 @@ import com.example.gatherlink.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
+import java.util.Map;
+import com.example.gatherlink.model.ProfileData;
 
 public class SignUpActivity extends AppCompatActivity {
     EditText emailInput;
@@ -24,7 +25,6 @@ public class SignUpActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore store;
-    HashMap<String, Object> userData = new HashMap<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,18 +54,14 @@ public class SignUpActivity extends AppCompatActivity {
         String firstName = firstNameInput.getText().toString().trim();
         String lastName = lastNameInput.getText().toString().trim();
         String email = emailInput.getText().toString().trim();
-        String password = passwordInput.getText().toString().trim();
+        String password = passwordInput.getText().toString();
 
         if (!firstName.isEmpty() && !lastName.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
             firebaseAuth.createUserWithEmailAndPassword(email, password)
                     .addOnSuccessListener(authResult -> {
                         String userId = firebaseAuth.getCurrentUser().getUid();
 
-                        userData.put("userID", userId);
-                        userData.put("firstName", firstName);
-                        userData.put("lastName", lastName);
-                        userData.put("email", email);
-                        userData.put("password", password);
+                        Map<String, Object> userData = ProfileData.create(userId, firstName, lastName, email);
                         userData.put("createdAt", com.google.firebase.Timestamp.now());
                         userData.put("updatedAt", com.google.firebase.Timestamp.now());
 
@@ -73,7 +69,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 .addOnSuccessListener(newUser -> {
                                     Toast.makeText(this, "Account created!", Toast.LENGTH_SHORT).show();
 
-                                    Intent signUpIntent = new Intent(SignUpActivity.this, LoginActivity.class);
+                                    Intent signUpIntent = new Intent(SignUpActivity.this, HomeActivity.class);
                                     startActivity(signUpIntent);
                                     finish();
                                 })

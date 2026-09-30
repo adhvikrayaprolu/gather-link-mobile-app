@@ -18,10 +18,16 @@ public class GroupDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(!com.example.gatherlink.utils.SessionGuard.require(this))return;
         setContentView(R.layout.activity_group_details);
 
         GroupModel group = (GroupModel) getIntent().getSerializableExtra("groupData");
 
+        if (group == null) {
+            android.widget.Toast.makeText(this, "Group information is missing.", android.widget.Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
         initializeFrontEndElements();
 
         nameText.setText(group.getGroupName());

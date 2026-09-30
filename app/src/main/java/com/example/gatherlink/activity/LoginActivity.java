@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void login() {
         String email = emailInput.getText().toString().trim();
-        String password = passwordInput.getText().toString().trim();
+        String password = passwordInput.getText().toString();
 
         if (!email.isEmpty() && !password.isEmpty()) {
             firebaseAuth.signInWithEmailAndPassword(email, password)
