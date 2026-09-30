@@ -1,12 +1,17 @@
-# gather-link-mobile-app roadmap
+# gather-link-mobile-app reconciliation roadmap
 
-1. [Stop storing passwords and enforce Firebase data ownership](https://github.com/adhvikrayaprolu/gather-link-mobile-app/issues/1) — P0 / human-review
-2. [Make Android setup and core navigation reliably verifiable](https://github.com/adhvikrayaprolu/gather-link-mobile-app/issues/2) — P1 / blocked
-   Depends on #1
-3. [Add reliable unit and Firebase emulator regression tests](https://github.com/adhvikrayaprolu/gather-link-mobile-app/issues/3) — P1 / ready
+Integration awaiting human review: [https://github.com/adhvikrayaprolu/gather-link-mobile-app/pull/6](https://github.com/adhvikrayaprolu/gather-link-mobile-app/pull/6). Main is unchanged.
 
-NEXT AUTOMATION-READY ISSUE: [#3](https://github.com/adhvikrayaprolu/gather-link-mobile-app/issues/3)
+## Already implemented in the active PR
+- [#1](https://github.com/adhvikrayaprolu/gather-link-mobile-app/issues/1) — verified implementation; blocked from duplicate agent selection pending merge.
+- [#3](https://github.com/adhvikrayaprolu/gather-link-mobile-app/issues/3) — verified implementation; blocked from duplicate agent selection pending merge.
 
-Portfolio tracker: https://github.com/adhvikrayaprolu/gather-link-mobile-app/issues/4
+## Remaining work
+- #2
+- #7
 
-Infrastructure PR: https://github.com/adhvikrayaprolu/gather-link-mobile-app/pull/5
+See the current issue bodies for partial implementation, dependencies and human approval boundaries. No live credential rotation, production migration or deployment was performed.
+
+NEXT AUTOMATION-READY ISSUE: None until review/dependencies resolve. Do not recreate work in the active PR.
+
+Portfolio readiness tracker: https://github.com/adhvikrayaprolu/gather-link-mobile-app/issues/4
